@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחשבון נכות - ביטוח לאומי</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #222535;
+    --border: #2e3348;
+    --accent: #4f7cff;
+    --accent2: #7c4fff;
+    --text: #e8eaf6;
+    --text2: #8b90b0;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* Background effect */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(79,124,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(79,124,255,0.12);
+    border: 1px solid rgba(79,124,255,0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .header h1 {
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #e8eaf6 0%, #8b90b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .header p {
+    color: var(--text2);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  input[type="password"],
+  input[type="text"],
+  textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    direction: rtl;
+    width: 100%;
+  }
+
+  input[type="password"]:focus,
+  input[type="text"]:focus,
+  textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(79,124,255,0.35);
+  }
+
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-save {
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+
+  /* Main form */
+  .main-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .main-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .main-section .hint {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .example-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .example-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .submit-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    align-items: center;
+  }
+
+  .btn-main {
+    flex: 1;
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  /* Loading */
+  .loading {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    color: var(--text2);
+    font-size: 14px;
+  }
+
+  .loading.active { display: flex; }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Result */
+  .result-section {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .result-section.visible { display: block; }
+
+  .result-header {
+    background: linear-gradient(135deg, rgba(79,124,255,0.15), rgba(124,79,255,0.1));
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-header .icon {
+    font-size: 20px;
+  }
+
+  .result-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .result-body {
+    padding: 24px;
+  }
+
+  /* Disability cards */
+  .disability-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+
+  .disability-card:last-child { margin-bottom: 0; }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .card-section {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .percentage-badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 20px;
+    font-weight: 900;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .card-note {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* Total section */
+  .total-section {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(79,124,255,0.1), rgba(124,79,255,0.08));
+    border: 1px solid rgba(79,124,255,0.3);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .total-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .total-percent {
+    font-size: 32px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Raw answer fallback */
+  .raw-answer {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  .raw-answer strong { color: var(--accent); }
+
+  /* Warning */
+  .disclaimer {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #d4a017;
+    line-height: 1.6;
+    display: flex;
+    gap: 8px;
+  }
+
+  .disclaimer .warn-icon { flex-shrink: 0; font-size: 14px; }
+
+  /* Error */
+  .error-box {
+    background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    color: var(--danger);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .input-row { flex-direction: column; }
+    .card-top { flex-direction: column; }
+    .total-section { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-badge">⚖️ ביטוח לאומי</div>
+    <h1>מחשבון אחוזי נכות</h1>
+    <p>תאר את מצבך הרפואי ותקבל את הסעיף המדויק מספר המבחנים</p>
+  </div>
+
+  <!-- Main form -->
+  <div class="main-section">
+    <h2>תאר את המצב הרפואי</h2>
+    <p class="hint">כתב בפירוט — אבחנות, תסמינים, מגבלות תפקודיות, טיפולים. ככל שיהיה מפורט יותר, כך התוצאה תהיה מדויקת יותר.</p>
+
+    <div class="section-label">דוגמאות מהירות:</div>
+    <div class="examples">
+      <div class="example-chip" onclick="setExample(this)">סוכרת עם אינסולין</div>
+      <div class="example-chip" onclick="setExample(this)">קטיעת אצבע אגודל יד ימין</div>
+      <div class="example-chip" onclick="setExample(this)">ירידה בשמיעה 60 דציבל</div>
+      <div class="example-chip" onclick="setExample(this)">אסתמה עם אשפוזים</div>
+      <div class="example-chip" onclick="setExample(this)">שבר חוליה עם הגבלת תנועה</div>
+      <div class="example-chip" onclick="setExample(this)">דיכאון עם מגבלה בעבודה</div>
+    </div>
+
+    <textarea id="description" placeholder="לדוגמה: אני סובל מסוכרת סוג 2 המטופלת ב-4 זריקות אינסולין ביום. לאחרונה התפתחה נוירופתיה ברגליים עם כאבים קבועים..."></textarea>
+
+    <div class="submit-row">
+      <button class="btn btn-main" id="submitBtn" onclick="analyze()">🔍 מצא סעיף בספר המבחנים</button>
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <span>מנתח...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-section" id="resultSection">
+    <div class="result-header">
+      <span class="icon">📋</span>
+      <h3>תוצאות מספר המבחנים</h3>
+    </div>
+    <div class="result-body" id="resultBody"></div>
+  </div>
+
+  <div class="disclaimer">
+    <span class="warn-icon">⚠️</span>
+    <span>המידע מוצג לצורך אינפורמטיבי בלבד ואינו תחליף לייעוץ משפטי או רפואי מקצועי. אחוזי הנכות הסופיים נקבעים על ידי ועדה רפואית של ביטוח לאומי.</span>
+  </div>
+
+</div>
+
+<script>
+// ספר המבחנים — תוכן מורחב
+const BOOK_CONTENT = `
+ספר המבחנים לנכות כללית ונפגעי עבודה - ביטוח לאומי
+תקנות הביטוח הלאומי (קביעת דרגת נכות לנפגעי עבודה) תשט"ז 1956
+
+====== פרק ראשון: מחלות פנימיות ======
+
+סעיף 4 - סוכרת:
+(א) היפרגליקמיה או סוכרת, בלא טיפול תרופתי: 0%
+(ב) סוכרת בטיפול פומי או אנלוג GLP-1: 10%
+(ג) סוכרת בטיפול אינסולין או בטיפול משולב עם אינסולין: 20%
+(ד) סוכרת לא מאוזנת המטופלת טיפול אינטנסיבי באינסולין (4 זריקות ומעלה ביום או משאבת אינסולין): 40%
+(ה) סוכרת עם אי יציבות קלינית בולטת (סוכרת שבירה, חמצת מטבולית, שני אירועי היפוגליקמיה קשים): 50%
+(ו) סוכרת עם סיבוך באחד מאברי המטרה בחומרה 30% לפחות, או עם שני סיבוכים 20% לפחות: 65%
+(ז) סוכרת עם שלושה סיבוכים לפחות באברי המטרה, כל אחד 30% לפחות: 100%
+הערה: אברי המטרה - עיניים, מערכת עצבים, כליות, כלי דם גדולים וקטנים.
+
+סעיף 5 - מחלות ריאה כרוניות (COPD):
+(א) עם FEV1 או DLCO בין 65% ל-74%: 20%
+(ב) עם FEV1 או DLCO בין 50% ל-64%: 40%
+(ג) עם FEV1 בין 30% ל-49% או DLCO בין 35% ל-49%: 60%
+(ד) עם FEV1 קטן מ-30% או DLCO קטן מ-35%: 100%
+
+סעיף 6 - אסתמה (קצרת הסימפונות):
+ניקוד לפי טבלאות (FEV1, הפיכות, טיפול):
+(א) ניקוד 0: 0%
+(ב) ניקוד 1-3: 10%
+(ג) ניקוד 4-6: 20%
+(ד) ניקוד 7-9: 40%
+(ה) ניקוד 10 ומעלה: 60%
+(ו) ניקוד מעל 5 עם שני אשפוזים לפחות בטיפול נמרץ: 80%
+(ז) הנשמה מלאכותית קבועה: 100%
+
+סעיף 9 - מחלות הלב:
+מחלת לב כלילית - לפי טבלה (מקטע פליטה + EST/NYHA):
+- מקטע פליטה >60%, NYHA I: ללא נכות
+- מקטע פליטה 45-60%, NYHA II: 25%
+- מקטע פליטה 30-44%, NYHA III: 50%
+- מקטע פליטה <30%, NYHA IV: 100%
+יתר לחץ דם:
+(א) לחץ דיאסטולי עד 95 ממ"כ ללא סיבוכים: 0%
+(ב)(I) לחץ 95-110 ממ"כ, ללא הגדלת לב: 10%
+(ב)(II) לחץ 95-110 ממ"כ, עם הגדלת לב: 30%
+
+====== מחלות הדם ======
+
+סעיף 2 - מחלות דם:
+אנמיה:
+(א) אנמיה שחלפה: 0%
+(ב) אנמיה כרונית קלה (המוגלובין מתחת 10): 10%
+(ג) אנמיה כרונית עם תלות בתכשירי גדילה או עירויי דם: 30%
+(ד) אנמיה כרונית עם תלות קבועה בעירוי דם: 50%
+(ה) אנמיה כרונית עם תלות קבועה בעירויי דם (יותר ממנה לחודש): 100%
+
+====== פרק שני: תסמונות נוירולוגיות ======
+
+סעיף 29 - תסמונות מוחיות:
+חולשת פלג גוף (hemiparesis):
+(א) קלה מאוד - סימנים פירמידליים בלבד: פלג דומיננטי 10%, לא דומיננטי 5%
+(ב) קלה - הליכה עצמאית עם הפרעה קלה ביד: פלג דומיננטי 30%, לא דומיננטי 20%
+(ג) בינונית - הליכה בעזרים: פלג דומיננטי 50%, לא דומיננטי 40%
+(ד) קשה - ללא הליכה עצמאית: פלג דומיננטי 80%, לא דומיננטי 60%
+(ה) שיתוק מלא (hemiplegia): 100%
+
+חולשת פלג גוף תחתון (paraparesis):
+(א) קלה - הליכה עצמאית: 20%
+(ב) בינונית - הליכה בעזרים: 50%
+(ג) קשה - ללא הליכה עצמאית: 80%
+(ד) שיתוק מלא (paraplegia): 100%
+
+סעיף 30 - אפילפסיה:
+התקפים כפיוניים כלליים:
+(א) ללא התקפים במשך שנתיים: 0%
+(ב) עד 2 התקפים בשנה: 20%
+(ג) 3 התקפים בשנה: 40%
+(ד) 4 התקפים בשנה: 60%
+(ה) 5-6 התקפים בשנה: 80%
+(ו) מעל 6 התקפים בשנה או סטטוס אפילפטי: 100%
+
+סעיף 31 - עצבי הגפיים העליונים:
+פגימה בעצב Radialis:
+(א) הפרעה קלה (כוח 4/5): פלג דומיננטי 40%, לא דומיננטי 30%
+(ב) הפרעה בינונית (כוח 3/5): פלג דומיננטי 20%, לא דומיננטי 15%
+(ג) שיתוק מלא (כוח 2/5 ומטה): פלג דומיננטי 40%, לא דומיננטי 30%
+
+סעיף 32 - עצבי הגפיים התחתונים:
+פגימה בעצב Sciatic:
+(א) הפרעה קלה: 10%
+(ב) הפרעה בינונית: 20%
+(ג) שיתוק מלא: 40%
+
+====== פרק שלישי: מחלות נפש ======
+
+סעיף 34 - הפרעות במצב הרוח, חרדה, PTSD:
+(א) רמיסיה מלאה ללא הפרעה: 0%
+(ב) סימנים שארתיים, הגבלה קלה: 10%
+(ג) סימנים קלים, הפרעה בינונית, טיפול תרופתי: 20%
+(ד) רמיסיה חלקית, הגבלה ניכרת: 30%
+(ה) רמיסיה חלקית, הגבלה קשה: 50%
+(ו) הפרעה פעילה, הגבלה קשה מאוד: 70%
+(ז) צורך בהשגחה מתמדת: 100%
+
+סעיף 33 - סכיזופרניה:
+(א) רמיסיה מלאה ללא הגבלה: 0%
+(ב) רמיסיה, טיפול תרופתי, הגבלה קלה: 10%
+(ג) סימנים שליליים קלים, הגבלה בינונית: 25%
+(ד) רמיסיה חלקית, סימנים בולטים, הגבלה ניכרת: 40%
+(ה) ריבוי התקפים, הגבלה ניכרת: 50%
+(ו) מחלה פעילה, הגבלה קשה: 70%
+(ז) אשפוז פסיכיאטרי מלא: 100%
+
+====== פרק רביעי: מערכת השלד והמפרקים ======
+
+סעיף 37 - עמוד השדרה:
+הגבלת תנועות צווארי:
+(א) קלה: 10%
+(ב) בינונית: 20%
+(ג) קשה: 30%
+הגבלת תנועות מתני:
+(א) קלה: 10%
+(ב) בינונית: 20%
+(ג) קשה: 30%
+קשיון צווארי נוח: 30%
+קשיון צווארי לא נוח: 50%
+קשיון מתני נוח: 30%
+קשיון מתני לא נוח: 40%-50%
+
+סעיף 35 - ארתריטיס:
+(א) ללא השפעה: 0%
+(ב) השפעה קלה: 10%
+(ג) השפעה בינונית: 20%
+(ד) השפעה ניכרת: 30%
+(ה) קשיון בפרקים קטנים: 50%
+(ו) קשיון פרקים גדולים: 80%
+(ז) רתוק לכסא גלגלים: 100%
+
+====== סעיף 40 - עצמות הגפיים העליונים ======
+
+אבדן גף עליון:
+(א) בפרק הכתף: ימין 80%, שמאל 70%
+(ב) מעל מקום חיבור הדלטואיד: ימין 75%, שמאל 65%
+(ג) מתחת לדלטואיד: ימין 70%, שמאל 60%
+אבדן האמה: ימין 65%, שמאל 55%
+אבדן היד בשורש: ימין 60%, שמאל 50%
+
+====== סעיף 43 - קטיעת אצבעות יד ======
+
+אגודל:
+(א) קטיעת אגודל עם עצם מסרק: ימין 25%, שמאל 20%
+(ב) שני גלילים: ימין 20%, שמאל 15%
+(ג) גליל סופי: ימין 15%, שמאל 10%
+(ד) חצי גליל סופי: 8%
+
+אצבע 2:
+(א) עם עצם מסרק: ימין 15%, שמאל 12%
+(ב) לפחות 1.5 גלילים: ימין 12%, שמאל 10%
+(ג) גליל סופי: 5%
+
+אצבע 3:
+(א) עם עצם מסרק: ימין 15%, שמאל 12%
+(ג) גליל סופי: 5%
+
+אצבע 4 או 5:
+(א) עם עצם מסרק: 10%
+(ג) גליל סופי: 5%
+
+====== סעיף 41 - פרקי הגפיים העליונים ======
+
+קשיון כתף נוח: ימין 30%, שמאל 25%
+קשיון כתף לא נוח: ימין 50%, שמאל 40%
+הגבלת תנועות כתף עד גובה השכם: 15%
+הגבלת תנועות כתף עד 45°: ימין 25%, שמאל 25%
+קשיון מרפק נוח: ימין 30%, שמאל 20%
+קשיון מרפק לא נוח: ימין 40%, שמאל 30%
+קשיון שורש יד נוח: ימין 20%, שמאל 15%
+קשיון שורש יד לא נוח: ימין 40%, שמאל 30%
+
+====== סעיף 47-48 - גפיים תחתונים ======
+
+קטיעת גף תחתון בפרק הירך: 80%
+קטיעת גף בשליש עליון ירך: 80%
+קטיעת גף באמצע ירך: 65%
+קטיעת שוק: 50%-55%
+
+קשיון ירך נוח: 40%
+קשיון ירך לא נוח: 50%
+קשיון ברך נוח: 30%
+קשיון ברך לא נוח: 50%
+
+====== פרק ה': ליקויי ראיה ======
+
+סעיף 52 - ליקויי ראייה (לפי טבלה):
+עיוורון מלא שתי עיניים: 100%
+ראיה 6/60 בעין אחת, 6/6 בשניה: 30%
+ראיה 1/60 בשתי עיניים: 90%
+
+====== פרק ו': אוזניים ======
+
+סעיף 72 - ליקוי שמיעה (לפי טבלה אודיומטרית):
+ירידה 15-20 דציבל בשתי אוזניים: 0-10%
+ירידה 30 דציבל בשתי אוזניים: 15-20%
+ירידה 50 דציבל בשתי אוזניים: 25-30%
+ירידה 70 דציבל בשתי אוזניים: 35-45%
+ירידה מעל 80 דציבל בשתי אוזניים: 50-60%
+
+====== פרק ז': אף, אוזן, גרון ======
+
+סעיף 71 - לארינקס:
+צרידות קלה עד בינונית: 5-10%
+צרידות קשה: 20%
+אפוניה (אבדן קול): 30%
+טרכאוסטומיה קבועה: 50%
+
+====== פרק ח': כליות ======
+
+סעיף 22 - כליות:
+כריתת כליה אחת ללא הפרעה: 30%
+כריתת כליה עם הפרעות קלות בשנייה: 60%
+דלקת כליות כרונית עם תסמונת נפרוטית: 50%-80%
+
+====== פרק ט': עור ======
+
+סעיף 75 - צלקות:
+(א) צלקות לא מפריעות: 0%
+(ב) צלקות מכאיבות או מכערות: 10%
+(ג) צלקות נרחבות: 20%
+פנים וצוואר:
+(א) שטחיות ולא מכערות: 0%
+(ב) מכערות: 10%
+(ג) רחבות עם כיעור ניכר: 20%
+(ד) שינויים בולטים בפנים: 30%
+(ה) מעוררות דחייה: 50%
+
+====== פרק י': מוגבלות שכלית ======
+
+סעיף 91:
+(א) גבולית (IQ 70-79): 20%
+(ב) קלה (IQ 55-69): 40%
+(ג) בינונית (IQ 40-54): 65%
+(ד) קשה (IQ 30-39): 75%
+(ה) חמורה (IQ 0-29): 100%
+
+====== פרק יא: פיברומיאלגיה ======
+
+סעיף 92 - פיברומיאלגיה / תשישות כרונית:
+(א) ברמיסה: 0%
+(ב) הפרעה קלה: 10%
+(ג) סימנים קלים, הפרעה בינונית: 20%
+(ד) סימנים בינוניים, הפרעה ניכרת: 30%
+(ה) סימנים קשים, הפרעה קשה: 40%
+`;
+
+function setExample(el) {
+  document.getElementById('description').value = el.textContent;
+}
+
+async function analyze() {
+  const desc = document.getElementById('description').value.trim();
+
+  if (!desc) {
+    alert('נא לתאר את המצב הרפואי');
+    return;
+  }
+
+  // UI - loading
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('loading').classList.add('active');
+  document.getElementById('resultSection').classList.remove('visible');
+
+  try {
+    const response = await fetch('/.netlify/functions/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: desc })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error || `שגיאה: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.raw) {
+      showRaw(data.raw);
+    } else {
+      showResult(data);
+    }
+
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').style.display = '';
+    document.getElementById('loading').classList.remove('active');
+  }
+}
+
+function showResult(data) {
+  const section = document.getElementById('resultSection');
+  const body = document.getElementById('resultBody');
+
+  let html = '';
+
+  if (data.findings && data.findings.length > 0) {
+    data.findings.forEach(f => {
+      html += `
+        <div class="disability-card">
+          <div class="card-top">
+            <div>
+              <div class="card-section">סעיף ${f.section}</div>
+              <div class="card-title">${f.name}</div>
+            </div>
+            <div class="percentage-badge">${f.percentage}%</div>
+          </div>
+          <div class="card-desc">${f.description}</div>
+          ${f.note ? `<div class="card-note">💡 ${f.note}</div>` : ''}
+        </div>
+      `;
+    });
+
+    if (data.total !== undefined) {
+      html += `
+        <div class="total-section">
+          <div>
+            <div class="card-section">נכות כוללת משולבת</div>
+            <div class="total-label">${data.calculation || ''}</div>
+          </div>
+          <div class="total-percent">${data.total}%</div>
+        </div>
+      `;
+    }
+
+    if (data.summary) {
+      html += `
+        <div style="margin-top:16px; padding:16px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
+          <div class="section-label" style="margin-bottom:8px;">📝 סיכום</div>
+          <div style="font-size:14px; line-height:1.7; color:var(--text2);">${data.summary}</div>
+        </div>
+      `;
+    }
+  } else {
+    html = `<div class="error-box">לא נמצאו סעיפים מתאימים. נסה לפרט יותר את המצב הרפואי.</div>`;
+  }
+
+  body.innerHTML = html;
+  section.classList.add('visible');
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showRaw(text) {
+  const section = document.getElementById('resultSection');
+  const body = document.getElementById('resultBody');
+  body.innerHTML = `<div class="raw-answer">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`;
+  section.classList.add('visible');
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showError(msg) {
+  const section = document.getElementById('resultSection');
+  const body = document.getElementById('resultBody');
+  body.innerHTML = `<div class="error-box">❌ שגיאה: ${msg}<br><br>נסה שוב או בדוק את החיבור לאינטרנט.</div>`;
+  section.classList.add('visible');
+}
+</script>
+</body>
+</html>
