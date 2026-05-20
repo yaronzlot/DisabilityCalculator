@@ -434,7 +434,7 @@
       <button class="btn btn-main" id="submitBtn" onclick="analyze()">🔍 מצא סעיף בספר המבחנים</button>
       <div class="loading" id="loading">
         <div class="spinner"></div>
-        <span>מנתח...</span>
+        <span id="loadingText">מנתח...</span>
       </div>
     </div>
   </div>
@@ -712,6 +712,10 @@ function setExample(el) {
   document.getElementById('description').value = el.textContent;
 }
 
+function setLoadingText(msg) {
+  document.getElementById('loadingText').textContent = msg;
+}
+
 async function analyze() {
   const desc = document.getElementById('description').value.trim();
 
@@ -720,25 +724,46 @@ async function analyze() {
     return;
   }
 
-  // UI - loading
   document.getElementById('submitBtn').disabled = true;
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('loading').classList.add('active');
   document.getElementById('resultSection').classList.remove('visible');
+  setLoadingText('מנתח...');
 
   try {
-    const response = await fetch('/.netlify/functions/gemini', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ description: desc })
-    });
+    let response, data;
+    let attempts = 0;
+    const maxAttempts = 4;
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error || `שגיאה: ${response.status}`);
+    while (attempts < maxAttempts) {
+      response = await fetch('/.netlify/functions/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: desc })
+      });
+
+      if (response.status === 429) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw new Error('עומס זמני על השרת. נסה שוב בעוד כמה דקות.');
+        }
+        // Wait 65 seconds and retry
+        for (let i = 65; i > 0; i--) {
+          setLoadingText(`עומס זמני, ממתין ${i} שניות...`);
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        setLoadingText('מנסה שוב...');
+        continue;
+      }
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || `שגיאה: ${response.status}`);
+      }
+
+      data = await response.json();
+      break;
     }
-
-    const data = await response.json();
 
     if (data.raw) {
       showRaw(data.raw);
@@ -752,6 +777,7 @@ async function analyze() {
     document.getElementById('submitBtn').disabled = false;
     document.getElementById('submitBtn').style.display = '';
     document.getElementById('loading').classList.remove('active');
+    setLoadingText('מנתח...');
   }
 }
 

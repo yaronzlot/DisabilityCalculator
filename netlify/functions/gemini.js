@@ -137,9 +137,7 @@ const BOOK_CONTENT = `
 סעיף 92: ברמיסה: 0%; קלה: 10%; בינונית: 20%; ניכרת: 30%; קשה: 40%
 `;
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-async function callGemini(apiKey, prompt, attempt = 0) {
+async function callGemini(apiKey, prompt) {
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
     {
@@ -152,12 +150,9 @@ async function callGemini(apiKey, prompt, attempt = 0) {
     }
   );
 
-  // Rate limit — wait and retry (up to 3 times)
-  if (response.status === 429 && attempt < 3) {
-    const retryAfter = parseInt(response.headers.get('Retry-After') || '60', 10);
-    const waitMs = Math.min(retryAfter * 1000, 70000);
-    await sleep(waitMs);
-    return callGemini(apiKey, prompt, attempt + 1);
+  if (response.status === 429) {
+    // Return special code so frontend can retry after delay
+    return { rateLimited: true };
   }
 
   if (!response.ok) {
@@ -232,6 +227,15 @@ ${BOOK_CONTENT}
 
   try {
     const data = await callGemini(apiKey, prompt);
+
+    if (data.rateLimited) {
+      return {
+        statusCode: 429,
+        headers,
+        body: JSON.stringify({ error: 'RATE_LIMIT', retryAfter: 60 })
+      };
+    }
+
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     try {
