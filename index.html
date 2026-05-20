@@ -437,9 +437,13 @@
         <span id="loadingText">מנתח...</span>
       </div>
     </div>
+    <div style="margin-top:10px; text-align:left;">
+      <button onclick="testConnection()" style="background:none; border:1px solid var(--border); border-radius:8px; padding:6px 12px; color:var(--text2); font-size:12px; cursor:pointer;">🔧 בדיקת חיבור</button>
+    </div>
   </div>
 
-  <!-- Result -->
+  <!-- Test result -->
+  <div id="testResult" style="display:none; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:20px; font-size:12px; font-family:monospace; white-space:pre-wrap; color:var(--text2); direction:ltr; text-align:left;"></div>
   <div class="result-section" id="resultSection">
     <div class="result-header">
       <span class="icon">📋</span>
@@ -712,10 +716,6 @@ function setExample(el) {
   document.getElementById('description').value = el.textContent;
 }
 
-function setLoadingText(msg) {
-  document.getElementById('loadingText').textContent = msg;
-}
-
 async function analyze() {
   const desc = document.getElementById('description').value.trim();
 
@@ -724,46 +724,25 @@ async function analyze() {
     return;
   }
 
+  // UI - loading
   document.getElementById('submitBtn').disabled = true;
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('loading').classList.add('active');
   document.getElementById('resultSection').classList.remove('visible');
-  setLoadingText('מנתח...');
 
   try {
-    let response, data;
-    let attempts = 0;
-    const maxAttempts = 4;
+    const response = await fetch('/.netlify/functions/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: desc })
+    });
 
-    while (attempts < maxAttempts) {
-      response = await fetch('/.netlify/functions/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description: desc })
-      });
-
-      if (response.status === 429) {
-        attempts++;
-        if (attempts >= maxAttempts) {
-          throw new Error('עומס זמני על השרת. נסה שוב בעוד כמה דקות.');
-        }
-        // Wait 65 seconds and retry
-        for (let i = 65; i > 0; i--) {
-          setLoadingText(`עומס זמני, ממתין ${i} שניות...`);
-          await new Promise(r => setTimeout(r, 1000));
-        }
-        setLoadingText('מנסה שוב...');
-        continue;
-      }
-
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error || `שגיאה: ${response.status}`);
-      }
-
-      data = await response.json();
-      break;
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error || `שגיאה: ${response.status}`);
     }
+
+    const data = await response.json();
 
     if (data.raw) {
       showRaw(data.raw);
@@ -777,7 +756,6 @@ async function analyze() {
     document.getElementById('submitBtn').disabled = false;
     document.getElementById('submitBtn').style.display = '';
     document.getElementById('loading').classList.remove('active');
-    setLoadingText('מנתח...');
   }
 }
 
@@ -846,6 +824,40 @@ function showError(msg) {
   const body = document.getElementById('resultBody');
   body.innerHTML = `<div class="error-box">❌ שגיאה: ${msg}<br><br>נסה שוב או בדוק את החיבור לאינטרנט.</div>`;
   section.classList.add('visible');
+}
+
+async function testConnection() {
+  const box = document.getElementById('testResult');
+  box.style.display = 'block';
+  box.textContent = '⏳ בודק...';
+
+  try {
+    const response = await fetch('/.netlify/functions/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: 'סוכרת עם אינסולין' })
+    });
+
+    const status = response.status;
+    const data = await response.json();
+
+    if (status === 200) {
+      box.style.color = '#34d399';
+      box.textContent = '✅ STATUS: ' + status + '\n\n' + JSON.stringify(data, null, 2).substring(0, 500) + '...';
+    } else if (status === 429) {
+      box.style.color = '#fbbf24';
+      box.textContent = '⚠️ STATUS: 429 — Rate limit\nה-key עובד, אבל Gemini חסם זמנית.\n\n' + JSON.stringify(data, null, 2);
+    } else if (status === 500 && data.error === 'מפתח API לא מוגדר בשרת') {
+      box.style.color = '#f87171';
+      box.textContent = '❌ STATUS: ' + status + '\nה-API key לא מוגדר ב-Netlify!\nצריך להוסיף GEMINI_API_KEY בהגדרות Environment Variables.';
+    } else {
+      box.style.color = '#f87171';
+      box.textContent = '❌ STATUS: ' + status + '\n\n' + JSON.stringify(data, null, 2);
+    }
+  } catch (err) {
+    box.style.color = '#f87171';
+    box.textContent = '❌ שגיאת רשת: ' + err.message;
+  }
 }
 </script>
 </body>
