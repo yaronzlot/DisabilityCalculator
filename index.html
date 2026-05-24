@@ -3,555 +3,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>מחשבון נכות - ביטוח לאומי</title>
+<title>מדריך הכנה לוועדה רפואית</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
---bg: #0f1117;
---surface: #1a1d27;
---surface2: #222535;
---border: #2e3348;
---accent: #4f7cff;
---accent2: #7c4fff;
---text: #e8eaf6;
---text2: #8b90b0;
---success: #34d399;
---warning: #fbbf24;
---danger: #f87171;
-}
+:root { --bg: #0f1117; --surface: #1a1d27; --surface2: #222535; --border: #2e3348; --accent: #4f7cff; --accent2: #7c4fff; --text: #e8eaf6; --text2: #8b90b0; --success: #34d399; --warning: #fbbf24; --danger: #f87171; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-font-family: 'Heebo', sans-serif;
-background: var(--bg);
-color: var(--text);
-min-height: 100vh;
-direction: rtl;
-}
-body::before {
-content: '';
-position: fixed;
-top: -50%;
-right: -20%;
-width: 600px;
-height: 600px;
-background: radial-gradient(circle, rgba(79,124,255,0.08) 0%, transparent 70%);
-pointer-events: none;
-z-index: 0;
-}
-.container {
-max-width: 780px;
-margin: 0 auto;
-padding: 32px 20px;
-position: relative;
-z-index: 1;
-}
-.header {
-text-align: center;
-margin-bottom: 40px;
-}
-.header-badge {
-display: inline-flex;
-align-items: center;
-gap: 6px;
-background: rgba(79,124,255,0.12);
-border: 1px solid rgba(79,124,255,0.3);
-border-radius: 20px;
-padding: 6px 14px;
-font-size: 12px;
-color: var(--accent);
-margin-bottom: 16px;
-letter-spacing: 0.5px;
-}
-.header h1 {
-font-size: clamp(24px, 5vw, 36px);
-font-weight: 900;
-background: linear-gradient(135deg, #e8eaf6 0%, #8b90b0 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-line-height: 1.2;
-margin-bottom: 10px;
-}
-.header p {
-color: var(--text2);
-font-size: 15px;
-line-height: 1.6;
-}
-.section-label {
-font-size: 13px;
-font-weight: 500;
-color: var(--text2);
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 6px;
-}
-input[type="text"], textarea {
-background: var(--surface2);
-border: 1px solid var(--border);
-border-radius: 10px;
-padding: 12px 14px;
-color: var(--text);
-font-family: 'Heebo', sans-serif;
-font-size: 14px;
-outline: none;
-transition: border-color 0.2s;
-direction: rtl;
-width: 100%;
-}
-input[type="text"]:focus, textarea:focus {
-border-color: var(--accent);
-}
-textarea {
-resize: vertical;
-min-height: 120px;
-line-height: 1.6;
-}
-.btn {
-background: linear-gradient(135deg, var(--accent), var(--accent2));
-color: white;
-border: none;
-border-radius: 10px;
-padding: 12px 20px;
-font-family: 'Heebo', sans-serif;
-font-size: 14px;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.2s;
-white-space: nowrap;
-flex-shrink: 0;
-}
-.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,124,255,0.35); }
-.btn:active { transform: translateY(0); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.main-section {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: 16px;
-padding: 24px;
-margin-bottom: 20px;
-}
-.main-section h2 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-.main-section .hint {
-font-size: 13px;
-color: var(--text2);
-margin-bottom: 16px;
-line-height: 1.5;
-}
-.examples {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-margin-bottom: 16px;
-}
-.example-chip {
-background: var(--surface2);
-border: 1px solid var(--border);
-border-radius: 20px;
-padding: 5px 12px;
-font-size: 12px;
-color: var(--text2);
-cursor: pointer;
-transition: all 0.2s;
-}
-.example-chip:hover { border-color: var(--accent); color: var(--accent); }
-.submit-row {
-display: flex;
-gap: 10px;
-margin-top: 14px;
-align-items: center;
-}
-.btn-main { flex: 1; padding: 14px; font-size: 15px; }
-.loading {
-display: none;
-align-items: center;
-gap: 10px;
-color: var(--text2);
-font-size: 14px;
-}
-.loading.active { display: flex; }
-.spinner {
-width: 18px;
-height: 18px;
-border: 2px solid var(--border);
-border-top-color: var(--accent);
-border-radius: 50%;
-animation: spin 0.8s linear infinite;
-flex-shrink: 0;
-}
+body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; direction: rtl; }
+.container { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(79,124,255,0.12); border: 1px solid rgba(79,124,255,0.3); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--accent); margin-bottom: 14px; }
+h1 { font-size: clamp(26px, 6vw, 38px); font-weight: 900; background: linear-gradient(135deg, #e8eaf6 0%, #8b90b0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+.subtitle { color: var(--text2); font-size: 15px; line-height: 1.6; margin-bottom: 36px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+textarea { width: 100%; min-height: 120px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Heebo', sans-serif; font-size: 14px; outline: none; resize: vertical; line-height: 1.6; direction: rtl; }
+.btn { width: 100%; margin-top: 14px; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; border: none; border-radius: 10px; font-family: 'Heebo', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,124,255,0.35); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--text2); cursor: pointer; transition: all 0.2s; font-family: 'Heebo', sans-serif; }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.result-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; animation: fadeIn 0.4s ease; }
+.section-badge { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.section-name { font-size: 15px; font-weight: 700; }
+.pct-badge { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; border-radius: 8px; padding: 6px 14px; font-size: 20px; font-weight: 900; white-space: nowrap; }
+.level-row { display: flex; justify-content: space-between; align-items: center; border-radius: 8px; padding: 7px 12px; margin-bottom: 5px; }
+.level-rec { background: rgba(79,124,255,0.12); border: 1px solid rgba(79,124,255,0.4); }
+.level-other { background: rgba(255,255,255,0.03); border: 1px solid var(--border); }
+.doc-item { display: flex; gap: 8px; font-size: 13px; color: var(--text); line-height: 1.5; margin-bottom: 4px; }
+.doc-tip { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.2); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--success); line-height: 1.6; margin-top: 10px; }
+.total-box { background: linear-gradient(135deg, rgba(79,124,255,0.1), rgba(124,79,255,0.08)); border: 1px solid rgba(79,124,255,0.3); border-radius: 12px; padding: 18px; display: flex; justify-content: space-between; align-items: center; }
+.total-pct { font-size: 36px; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.disclaimer { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 12px; padding: 14px 18px; font-size: 12px; color: #d4a017; line-height: 1.6; display: flex; gap: 8px; margin-top: 20px; }
+.error-box { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); border-radius: 12px; padding: 16px; color: var(--danger); font-size: 14px; margin-bottom: 20px; }
+.loading-step { color: var(--text2); font-size: 13px; text-align: center; margin-top: 10px; }
+#disclaimer-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+.disclaimer-card { max-width: 500px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.disclaimer-warning { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.result-section {
-display: none;
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: 16px;
-overflow: hidden;
-}
-.result-section.visible { display: block; }
-.result-header {
-background: linear-gradient(135deg, rgba(79,124,255,0.15), rgba(124,79,255,0.1));
-border-bottom: 1px solid var(--border);
-padding: 16px 24px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.result-header h3 { font-size: 15px; font-weight: 700; }
-.result-body { padding: 24px; }
-.disability-card {
-background: var(--surface2);
-border: 1px solid var(--border);
-border-radius: 12px;
-padding: 18px;
-margin-bottom: 14px;
-}
-.disability-card:last-child { margin-bottom: 0; }
-.card-top {
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-gap: 12px;
-margin-bottom: 10px;
-}
-.card-section { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
-.card-title { font-size: 15px; font-weight: 700; line-height: 1.4; }
-.percentage-badge {
-background: linear-gradient(135deg, var(--accent), var(--accent2));
-color: white;
-border-radius: 8px;
-padding: 6px 14px;
-font-size: 20px;
-font-weight: 900;
-white-space: nowrap;
-flex-shrink: 0;
-}
-.card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.card-note {
-margin-top: 10px;
-padding-top: 10px;
-border-top: 1px solid var(--border);
-font-size: 12px;
-color: var(--text2);
-line-height: 1.5;
-}
-.total-section {
-margin-top: 20px;
-background: linear-gradient(135deg, rgba(79,124,255,0.1), rgba(124,79,255,0.08));
-border: 1px solid rgba(79,124,255,0.3);
-border-radius: 12px;
-padding: 18px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-.total-label { font-size: 14px; font-weight: 600; }
-.total-percent {
-font-size: 32px;
-font-weight: 900;
-background: linear-gradient(135deg, var(--accent), var(--accent2));
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-}
-.raw-answer {
-font-size: 14px;
-line-height: 1.8;
-color: var(--text);
-white-space: pre-wrap;
-}
-.raw-answer strong { color: var(--accent); }
-.disclaimer {
-background: rgba(251,191,36,0.08);
-border: 1px solid rgba(251,191,36,0.2);
-border-radius: 12px;
-padding: 14px 18px;
-margin-top: 20px;
-font-size: 12px;
-color: #d4a017;
-line-height: 1.6;
-display: flex;
-gap: 8px;
-}
-.disclaimer .warn-icon { flex-shrink: 0; font-size: 14px; }
-.error-box {
-background: rgba(248,113,113,0.08);
-border: 1px solid rgba(248,113,113,0.2);
-border-radius: 12px;
-padding: 16px;
-color: var(--danger);
-font-size: 14px;
-line-height: 1.5;
-}
-@media (max-width: 500px) {
-.card-top { flex-direction: column; }
-.total-section { flex-direction: column; gap: 8px; text-align: center; }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
 </style>
 </head>
 <body>
+
+<!-- Disclaimer Screen -->
+<div id="disclaimer-screen">
+  <div class="disclaimer-card">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:36px;margin-bottom:12px">⚖️</div>
+      <h2 style="font-size:20px;font-weight:900;margin-bottom:8px">מדריך הכנה לוועדה רפואית</h2>
+      <p style="color:#8b90b0;font-size:14px;line-height:1.7">כלי מידע בחינם המבוסס על ספר המבחנים הציבורי של ביטוח לאומי</p>
+    </div>
+    <div class="disclaimer-warning">
+      <div style="font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:10px">⚠️ הצהרת שימוש חשובה</div>
+      <div style="font-size:13px;color:#d4a017;line-height:1.8">
+        • האפליקציה מספקת <strong>מידע כללי בלבד</strong> על בסיס ספר המבחנים הציבורי<br>
+        • המידע <strong>אינו מהווה ייעוץ משפטי או רפואי</strong> ואינו מחייב<br>
+        • אחוזי הנכות הסופיים נקבעים על ידי ועדה רפואית של ביטוח לאומי בלבד<br>
+        • לסיוע מקצועי: <strong>יד מכוונת (*2496)</strong> או <strong>כל-זכות</strong>
+      </div>
+    </div>
+    <button class="btn" onclick="document.getElementById('disclaimer-screen').style.display='none'">
+      קראתי והבנתי — המשך לאפליקציה
+    </button>
+    <div style="font-size:11px;color:#8b90b0;text-align:center;margin-top:10px">בלחיצה אתה מאשר שקראת את תנאי השימוש</div>
+  </div>
+</div>
+
+<!-- Main App -->
 <div class="container">
-<div class="header">
-<div class="header-badge">⚖️ ביטוח לאומי</div>
-<h1>מחשבון אחוזי נכות</h1>
-<p>תאר את מצבך הרפואי ותקבל את הסעיף המדויק מספר המבחנים</p>
+  <div style="text-align:center;margin-bottom:36px">
+    <div class="badge">⚖️ ביטוח לאומי</div>
+    <h1>מדריך הכנה לוועדה רפואית</h1>
+    <p class="subtitle">תאר את מצבך הרפואי ותקבל את הסעיף הרלוונטי מספר המבחנים</p>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:16px;font-weight:700;margin-bottom:6px">תאר את המצב הרפואי</h2>
+    <p style="color:#8b90b0;font-size:13px;margin-bottom:16px;line-height:1.5">כתב בפירוט — אבחנות, תסמינים, מגבלות תפקודיות, טיפולים.</p>
+    <div class="chips">
+      <button class="chip" onclick="setEx(this)">סוכרת סוג 2 עם 4 זריקות אינסולין ביום</button>
+      <button class="chip" onclick="setEx(this)">כריתת גוף וזנב הלבלב</button>
+      <button class="chip" onclick="setEx(this)">אבנים בשתי הכליות עם כאבים חוזרים</button>
+      <button class="chip" onclick="setEx(this)">ירידה בשמיעה 60 דציבל</button>
+      <button class="chip" onclick="setEx(this)">אסתמה עם אשפוזים בטיפול נמרץ</button>
+      <button class="chip" onclick="setEx(this)">דיכאון עם הגבלה ניכרת בעבודה</button>
+    </div>
+    <textarea id="desc" placeholder="לדוגמה: כריתת גוף וזנב הלבלב לפני שנה, כעת סוכרת תלוית אינסולין..."></textarea>
+    <button class="btn" id="analyzeBtn" onclick="analyze()">🔍 מצא סעיף בספר המבחנים</button>
+    <div class="loading-step" id="loadingStep" style="display:none"></div>
+  </div>
+
+  <div id="errorBox" style="display:none" class="error-box"></div>
+  <div id="results" style="display:none"></div>
+
+  <div class="disclaimer">
+    <span style="flex-shrink:0">⚠️</span>
+    <span>האפליקציה מספקת מידע כללי בלבד על בסיס ספר המבחנים הציבורי של ביטוח לאומי, ואינה מהווה ייעוץ משפטי או רפואי. לסיוע מקצועי פנה לעו"ד, לרופא, "יד מכוונת" (*2496) או כל-זכות.</span>
+  </div>
 </div>
 
-<div class="main-section">
-<h2>תאר את המצב הרפואי</h2>
-<p class="hint">כתב בפירוט — אבחנות, תסמינים, מגבלות תפקודיות, טיפולים. ככל שיהיה מפורט יותר, כך התוצאה תהיה מדויקת יותר.</p>
-<div class="section-label">דוגמאות מהירות:</div>
-<div class="examples">
-<div class="example-chip" onclick="setExample(this)">סוכרת עם אינסולין</div>
-<div class="example-chip" onclick="setExample(this)">קטיעת אצבע אגודל יד ימין</div>
-<div class="example-chip" onclick="setExample(this)">ירידה בשמיעה 60 דציבל</div>
-<div class="example-chip" onclick="setExample(this)">אסתמה עם אשפוזים</div>
-<div class="example-chip" onclick="setExample(this)">שבר חוליה עם הגבלת תנועה</div>
-<div class="example-chip" onclick="setExample(this)">דיכאון עם מגבלה בעבודה</div>
-</div>
-<textarea id="description" placeholder="לדוגמה: אני סובל מסוכרת סוג 2 המטופלת ב-4 זריקות אינסולין ביום..."></textarea>
-<div class="submit-row">
-<button class="btn btn-main" id="submitBtn" onclick="analyze()">🔍 מצא סעיף בספר המבחנים</button>
-<div class="loading" id="loading">
-<div class="spinner"></div>
-<span>מנתח...</span>
-</div>
-</div>
-</div>
+<script type="module">
+import { HEMATOLOGY } from './02_hematology.js';
+import { ENDOCRINOLOGY } from './03_endocrinology_and_diabetes.js';
+import { RESPIRATORY } from './04_respiratory.js';
+import { CARDIOVASCULAR } from './05_cardiovascular.js';
+import { KIDNEYS_DIGESTIVE } from './06_kidneys_digestive_system.js';
+import { KIDNEYS_URINARY } from './07_kidneys_and_urinary.js';
+import { GENITAL } from './08_genital_infertility_breast.js';
+import { NEUROLOGY } from './09_neurology.js';
 
-<div class="result-section" id="resultSection">
-<div class="result-header">
-<span>📋</span>
-<h3>תוצאות מספר המבחנים</h3>
-</div>
-<div class="result-body" id="resultBody"></div>
-</div>
+const TOPIC_MAP = {
+  'המטולוגיה ודם': HEMATOLOGY,
+  'סוכרת ואנדוקרינולוגיה': ENDOCRINOLOGY,
+  'ריאות ונשימה': RESPIRATORY,
+  'לב וכלי דם': CARDIOVASCULAR,
+  'כליות ומערכת שתן': KIDNEYS_URINARY + '\n' + KIDNEYS_DIGESTIVE,
+  'עיכול לבלב וכבד': KIDNEYS_DIGESTIVE,
+  'נוירולוגיה ואפילפסיה': NEUROLOGY,
+  'גינקולוגיה פוריות ושד': GENITAL,
+};
 
-<div class="disclaimer">
-<span class="warn-icon">⚠️</span>
-<span>המידע מוצג לצורך אינפורמטיבי בלבד ואינו תחליף לייעוץ משפטי או רפואי מקצועי. אחוזי הנכות הסופיים נקבעים על ידי ועדה רפואית של ביטוח לאומי.</span>
-</div>
-</div>
+window.setEx = (el) => { document.getElementById('desc').value = el.textContent; };
 
-<script>
-const GEMINI_API_KEY = 'AIzaSyDqihxDzJuUfCAdNQm5cgSTJp32uQfzo_A';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const BOOK_CONTENT = `
-ספר המבחנים לנכות כללית ונפגעי עבודה - ביטוח לאומי
-
-סעיף 4 - סוכרת:
-(א) ללא טיפול: 0%
-(ב) טיפול פומי: 10%
-(ג) אינסולין: 20%
-(ד) 4 זריקות ומעלה ביום / משאבה: 40%
-(ה) סוכרת שבירה / חמצת: 50%
-(ו) סיבוך באחד מאברי המטרה 30%+: 65%
-(ז) שלושה סיבוכים 30%+ כל אחד: 100%
-
-סעיף 6 - אסתמה:
-(ב) ניקוד 1-3: 10%
-(ג) ניקוד 4-6: 20%
-(ד) ניקוד 7-9: 40%
-(ה) ניקוד 10+: 60%
-(ו) עם שני אשפוזים טיפול נמרץ: 80%
-
-סעיף 5 - COPD:
-FEV1 65-74%: 20%
-FEV1 50-64%: 40%
-FEV1 30-49%: 60%
-FEV1 <30%: 100%
-
-סעיף 9 - לב:
-NYHA I, EF>60%: 0%
-NYHA II, EF 45-60%: 25%
-NYHA III, EF 30-44%: 50%
-NYHA IV, EF<30%: 100%
-
-סעיף 30 - אפילפסיה:
-עד 2 התקפים/שנה: 20%
-3 התקפים: 40%
-4 התקפים: 60%
-5-6 התקפים: 80%
-7+ / סטטוס: 100%
-
-סעיף 34 - נפש (דיכאון, חרדה, PTSD):
-סימנים שארתיים: 10%
-סימנים קלים + טיפול: 20%
-רמיסיה חלקית, הגבלה ניכרת: 30%
-הגבלה קשה: 50%
-הגבלה קשה מאוד: 70%
-השגחה מתמדת: 100%
-
-סעיף 37 - עמוד שדרה:
-הגבלת תנועה קלה: 10%
-הגבלת תנועה בינונית: 20%
-הגבלת תנועה קשה: 30%
-קשיון נוח: 30%
-קשיון לא נוח: 40-50%
-
-סעיף 43 - קטיעת אצבעות יד:
-אגודל עם מסרק: ימין 25%, שמאל 20%
-אגודל 2 גלילים: ימין 20%, שמאל 15%
-אגודל גליל סופי: ימין 15%, שמאל 10%
-אצבע 2 עם מסרק: ימין 15%, שמאל 12%
-אצבע 2-3 גליל סופי: 5%
-אצבע 4-5: 5-10%
-
-סעיף 47-48 - גפיים תחתונים:
-קטיעה בפרק ירך: 80%
-קטיעה אמצע ירך: 65%
-קטיעת שוק: 50-55%
-
-סעיף 72 - שמיעה:
-ירידה 30 דציבל שתי אוזניים: 15-20%
-ירידה 50 דציבל: 25-30%
-ירידה 70 דציבל: 35-45%
-ירידה 80+ דציבל: 50-60%
-
-סעיף 22 - כליות:
-כריתת כליה אחת: 30%
-כריתה עם הפרעה בשנייה: 60%
-
-סעיף 91 - מוגבלות שכלית:
-גבולית IQ 70-79: 20%
-קלה IQ 55-69: 40%
-בינונית IQ 40-54: 65%
-קשה: 75%
-חמורה: 100%
-`;
-
-function setExample(el) {
-  document.getElementById('description').value = el.textContent;
-}
-
-async function analyze() {
-  const desc = document.getElementById('description').value.trim();
-  if (!desc) { alert('נא לתאר את המצב הרפואי'); return; }
-
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('submitBtn').style.display = 'none';
-  document.getElementById('loading').classList.add('active');
-  document.getElementById('resultSection').classList.remove('visible');
-
-  const prompt = `אתה מומחה לספר המבחנים של ביטוח לאומי בישראל.
-להלן תוכן ספר המבחנים:
-${BOOK_CONTENT}
-
-המטופל מתאר: "${desc}"
-
-נתח את המצב הרפואי ומצא את הסעיפים הרלוונטיים בספר המבחנים.
-החזר תשובה ב-JSON בלבד (ללא backticks, ללא הסבר נוסף) בפורמט:
-{
-  "findings": [
-    {
-      "section": "מספר הסעיף",
-      "name": "שם הפגימה בעברית",
-      "percentage": מספר,
-      "description": "הסבר קצר מדוע זה האחוז",
-      "note": "הערה רלוונטית אם יש"
-    }
-  ],
-  "total": מספר_הנכות_הכוללת_המשולבת,
-  "calculation": "הסבר חישוב הנכות המשולבת",
-  "summary": "סיכום קצר בעברית"
-}`;
-
-  try {
-    const response = await fetch(GEMINI_URL, {
+async function callAPI(body) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const res = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
-      })
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (res.status === 529 || res.status === 503) {
+      if (attempt < 3) { setStep(`השרת עמוס, מנסה שוב... (${attempt}/3)`); await sleep(5000); continue; }
+      throw new Error('השרת עמוס, נסה מאוחר יותר');
+    }
+    if (res.status === 429) {
+      const wait = parseInt(data.error?.message?.match(/\d+/)?.[0] || 60);
+      if (attempt < 3) { setStep(`ממתין ${wait} שניות...`); await sleep(wait * 1000); continue; }
+      throw new Error(`נסה שוב בעוד ${wait} שניות`);
+    }
+    if (!res.ok) throw new Error('שגיאת API ' + res.status);
+    return data;
+  }
+}
+
+function setStep(msg) {
+  document.getElementById('loadingStep').textContent = msg;
+  document.getElementById('loadingStep').style.display = msg ? 'block' : 'none';
+}
+
+function setLoading(on) {
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = on;
+  btn.innerHTML = on
+    ? '<div class="spinner"></div><span id="loadingStep2">מנתח...</span>'
+    : '🔍 מצא סעיף בספר המבחנים';
+}
+
+window.analyze = async function() {
+  const desc = document.getElementById('desc').value.trim();
+  if (!desc) return;
+
+  setLoading(true);
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+
+  try {
+    // Step 1: identify topics
+    document.querySelector('#analyzeBtn span#loadingStep2') && (document.querySelector('#analyzeBtn span#loadingStep2').textContent = 'מזהה נושאים...');
+
+    const step1 = await callAPI({
+      step: 'identify',
+      description: desc,
+      topics: Object.keys(TOPIC_MAP)
     });
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error?.message || `שגיאה ${response.status}`);
-    }
+    const selectedTopics = Object.keys(TOPIC_MAP).filter(t => step1.topics?.includes(t));
+    if (selectedTopics.length === 0) throw new Error('לא נמצאו נושאים רלוונטיים. נסה לפרט יותר.');
 
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Step 2: analyze with relevant content
+    const relevantContent = selectedTopics.map(t => `=== ${t} ===\n${TOPIC_MAP[t]}`).join('\n\n');
+    document.querySelector('#analyzeBtn span#loadingStep2') && (document.querySelector('#analyzeBtn span#loadingStep2').textContent = `מנתח: ${selectedTopics.join(', ')}...`);
 
-    try {
-      const clean = text.replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(clean);
-      showResult(parsed);
-    } catch {
-      showRaw(text);
-    }
+    const step2 = await callAPI({
+      step: 'analyze',
+      description: desc,
+      content: relevantContent
+    });
 
-  } catch (err) {
-    showError(err.message);
+    renderResults(step2);
+
+  } catch(e) {
+    document.getElementById('errorBox').textContent = '❌ שגיאה: ' + e.message;
+    document.getElementById('errorBox').style.display = 'block';
   } finally {
-    document.getElementById('submitBtn').disabled = false;
-    document.getElementById('submitBtn').style.display = '';
-    document.getElementById('loading').classList.remove('active');
+    setLoading(false);
   }
-}
+};
 
-function showResult(data) {
-  const section = document.getElementById('resultSection');
-  const body = document.getElementById('resultBody');
-  let html = '';
+function renderResults(data) {
+  const el = document.getElementById('results');
+  let html = `<div class="card" style="padding:0;overflow:hidden">
+    <div style="background:linear-gradient(135deg,rgba(79,124,255,.15),rgba(124,79,255,.1));border-bottom:1px solid #2e3348;padding:16px 24px;display:flex;align-items:center;gap:10px">
+      <span>📋</span><h3 style="font-size:15px;font-weight:700">תוצאות מספר המבחנים</h3>
+    </div><div style="padding:24px">`;
 
-  if (data.findings && data.findings.length > 0) {
-    data.findings.forEach(f => {
-      html += `
-        <div class="disability-card">
-          <div class="card-top">
-            <div>
-              <div class="card-section">סעיף ${f.section}</div>
-              <div class="card-title">${f.name}</div>
-            </div>
-            <div class="percentage-badge">${f.percentage}%</div>
-          </div>
-          <div class="card-desc">${f.description}</div>
-          ${f.note ? `<div class="card-note">💡 ${f.note}</div>` : ''}
+  for (const f of data.findings || []) {
+    const pct = f.recommended_percentage ?? f.percentage;
+    html += `<div class="result-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px">
+        <div><div class="section-badge">סעיף ${f.section}</div><div class="section-name">${f.name}</div></div>
+        <div class="pct-badge">${pct}%</div>
+      </div>
+      <div style="font-size:13px;color:#8b90b0;line-height:1.6">${f.description}</div>`;
+
+    if (f.levels?.length) {
+      html += `<div style="margin-top:12px"><div style="font-size:11px;font-weight:600;color:#8b90b0;margin-bottom:8px">כל רמות הסעיף:</div>`;
+      for (const lv of f.levels) {
+        const isRec = lv.percentage === pct;
+        html += `<div class="level-row ${isRec ? 'level-rec' : 'level-other'}">
+          <span style="font-size:12px;color:${isRec ? '#e8eaf6' : '#8b90b0'}">${isRec ? '<span style="color:#4f7cff;margin-left:6px">◀ מומלץ </span>' : ''}${lv.label}</span>
+          <span style="font-size:13px;font-weight:700;color:${isRec ? '#4f7cff' : '#8b90b0'}">${lv.percentage}%</span>
         </div>`;
-    });
-
-    if (data.total !== undefined) {
-      html += `
-        <div class="total-section">
-          <div>
-            <div class="card-section">נכות כוללת משולבת</div>
-            <div class="total-label">${data.calculation || ''}</div>
-          </div>
-          <div class="total-percent">${data.total}%</div>
-        </div>`;
+      }
+      html += `</div>`;
     }
 
-    if (data.summary) {
-      html += `
-        <div style="margin-top:16px; padding:16px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
-          <div class="section-label" style="margin-bottom:8px;">📝 סיכום</div>
-          <div style="font-size:14px; line-height:1.7; color:var(--text2);">${data.summary}</div>
-        </div>`;
+    if (f.note) html += `<div style="margin-top:10px;padding-top:10px;border-top:1px solid #2e3348;font-size:12px;color:#8b90b0">💡 ${f.note}</div>`;
+
+    if (f.documents?.length) {
+      html += `<div style="margin-top:14px;padding-top:14px;border-top:1px solid #2e3348">
+        <div style="font-size:12px;font-weight:700;color:#34d399;margin-bottom:10px">📄 בדיקות ומסמכים שהוועדה בוחנת לפי סעיף זה</div>`;
+      for (const d of f.documents) html += `<div class="doc-item"><span style="color:#34d399;flex-shrink:0">✓</span>${d}</div>`;
+      if (f.documents_tip) html += `<div class="doc-tip">💬 ${f.documents_tip}</div>`;
+      html += `</div>`;
     }
-  } else {
-    html = `<div class="error-box">לא נמצאו סעיפים מתאימים. נסה לפרט יותר.</div>`;
+    html += `</div>`;
   }
 
-  body.innerHTML = html;
-  section.classList.add('visible');
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+  if (data.total !== undefined) {
+    html += `<div class="total-box">
+      <div><div style="font-size:11px;color:#4f7cff;font-weight:600;margin-bottom:4px">נכות כוללת משולבת</div>
+      <div style="font-size:13px;color:#8b90b0">${data.calculation}</div></div>
+      <div class="total-pct">${data.total}%</div>
+    </div>`;
+  }
 
-function showRaw(text) {
-  const section = document.getElementById('resultSection');
-  const body = document.getElementById('resultBody');
-  body.innerHTML = `<div class="raw-answer">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`;
-  section.classList.add('visible');
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+  if (data.summary) {
+    html += `<div style="margin-top:16px;padding:16px;background:#222535;border-radius:10px;border:1px solid #2e3348">
+      <div style="font-size:12px;color:#8b90b0;margin-bottom:8px">📝 סיכום</div>
+      <div style="font-size:14px;line-height:1.7;color:#8b90b0">${data.summary}</div>
+    </div>`;
+  }
 
-function showError(msg) {
-  const section = document.getElementById('resultSection');
-  const body = document.getElementById('resultBody');
-  body.innerHTML = `<div class="error-box">❌ שגיאה: ${msg}</div>`;
-  section.classList.add('visible');
+  html += `</div></div>`;
+  el.innerHTML = html;
+  el.style.display = 'block';
 }
 </script>
 </body>
